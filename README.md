@@ -11,8 +11,9 @@ sets.
 | Depends on | `Rulealize.Abstraction` |
 | Specification | [doc/specification.md](doc/specification.md) |
 
-One operation. `chance.pick` takes a sequence of things that could happen and a weight for
-each, and produces one of them.
+Two operations. `chance.pick` takes a sequence of things that could happen and a weight for
+each, and produces one of them; `chance.roll` is a die of `faces` faces, which is the same
+draw said in the one shape common enough to be worth naming.
 
 ```jsonc
 // A card off a deck held as a count per rank: thirteen candidates, weighted by what is left

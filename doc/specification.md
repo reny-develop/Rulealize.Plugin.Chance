@@ -4,14 +4,14 @@
 | --- | --- |
 | Identifier | `Rulealize.Plugin.Chance` |
 | Namespace | `chance` |
-| Version | `1.0.0` |
+| Version | `1.1.0` |
 | Reserved prefix | none |
 | Depends on | [the value model](https://github.com/reny-develop/Rulealize.Abstraction/blob/main/doc/value-model.md), and nothing else |
 | Requires | a runtime that resolves draws — `Rulealize.Abstraction` 0.4.0 or later, and a host built on it |
 | Notation | [how a plugin specification is written](https://github.com/reny-develop/Rulealize.Abstraction/blob/main/doc/specification-notation.md) |
 
-Resolving what nobody chose. One operation, and the shortest specification in the standard
-set — almost all of it is about what the operation does *not* do.
+Resolving what nobody chose. Two operations, and one of the shortest specifications in the
+standard set — almost all of it is about what the operations do *not* do.
 
 **It does not choose.** `chance.pick` works out what could come out and how likely each of
 those is, and asks the runtime for one of them. The runtime is what enumerates the
@@ -30,6 +30,7 @@ being played, a simulation being run, or a hand being replayed.
 | Node | Kind | |
 | --- | --- | --- |
 | `chance.pick` | draw | one of a sequence, weighted |
+| `chance.roll` | draw | a die of `faces` faces (added in 1.1) |
 
 A **draw** is its own kind of operation. It builds an expression node like anything else
 that produces a value, and what the kind settles is where it may be written.
@@ -109,6 +110,35 @@ happened rather than leaving a silent hole in a distribution.
 
 ---
 
+## `chance.roll` (1.1)
+
+### Form
+
+```jsonc
+{ "op": "chance.roll", "faces": <expression:Number> }
+```
+
+One of `1 … faces`, each as likely as the others. Fewer than one face is an evaluation
+fault.
+
+### Why a die is worth a node of its own
+
+`chance.pick` over `seq.range` says the same thing, and says one thing too many: that the
+alternatives happen to be the first six integers. **A die is the commonest draw there is**,
+it needs no sequence vocabulary to write, and a rule set that names one can be read as
+naming one — by a person, and by a host deciding how to show what is about to happen.
+
+```jsonc
+{ "op": "chance.roll", "faces": 6 }
+```
+
+Two dice are two draws in one set of effects, which the runtime enumerates as thirty-six
+outcomes with the right weights on them. Nothing here adds them up: `math.add` does that, and
+a rule set wanting the sum of two dice is asking for two draws and not for one node that
+knows about pairs.
+
+---
+
 ## Decided
 
 - **No `chance.int`, no `chance.roll`, no generator of any kind.** An operation that
@@ -135,7 +165,7 @@ happened rather than leaving a silent hole in a distribution.
 - **`as` and `weight` rather than two parallel sequences.** The weight is nearly always
   computed from the candidate, and two sequences that had to stay the same length is exactly
   the kind of agreement that drifts. It is the same shape `seq.count` gives `where`.
-- **One operation, and no `chance.shuffle`.** Shuffling a deck of fifty-two has 52! outcomes
+- **No `chance.shuffle`.** Shuffling a deck of fifty-two has 52! outcomes
   and none of them can be walked, so an operation producing one would be a generator by
   another name. A rule set that wants a shuffled deck models the deck as a count per rank
   and draws from it — which is the same distribution, thirteen candidates wide instead of

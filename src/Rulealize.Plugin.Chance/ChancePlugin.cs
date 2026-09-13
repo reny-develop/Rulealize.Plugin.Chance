@@ -10,12 +10,14 @@ namespace Rulealize.Plugin.Chance
     /// </summary>
     /// <remarks>
     /// <para>
-    /// One operation, and it does not generate anything. <c>chance.pick</c> works out what
+    /// Two operations, and neither generates anything. <c>chance.pick</c> works out what
     /// could come out and how likely each of those is, and then asks the runtime for one of
-    /// them — which is the whole of the arrangement. There is no random number generator in
-    /// this assembly and there is not meant to be one: the runtime is what enumerates the
-    /// alternatives, so the runtime is what says which of them an evaluation is for, and
-    /// where the randomness ultimately comes from is a question for whoever is calling.
+    /// them — which is the whole of the arrangement; <c>chance.roll</c> is the same draw
+    /// over the faces of a die, which is the one shape common enough to be worth naming.
+    /// There is no random number generator in this assembly and there is not meant to be
+    /// one: the runtime is what enumerates the alternatives, so the runtime is what says
+    /// which of them an evaluation is for, and where the randomness ultimately comes from
+    /// is a question for whoever is calling.
     /// </para>
     /// <para>
     /// That is also why this registers with <c>AddDraw</c> rather than <c>AddExpression</c>.
@@ -35,7 +37,7 @@ namespace Rulealize.Plugin.Chance
     {
         /// <inheritdoc />
         public PluginManifest Manifest { get; } =
-            new("Rulealize.Plugin.Chance", new Version(1, 0, 0), "chance");
+            new("Rulealize.Plugin.Chance", new Version(1, 1, 0), "chance");
 
         /// <inheritdoc />
         public void Register(IPluginRegistry registry)
@@ -43,6 +45,7 @@ namespace Rulealize.Plugin.Chance
             ArgumentNullException.ThrowIfNull(registry);
 
             registry.AddDraw("pick", PickNode.Build);
+            registry.AddDraw("roll", RollNode.Build);
         }
     }
 }

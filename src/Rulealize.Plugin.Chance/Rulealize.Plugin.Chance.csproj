@@ -14,7 +14,7 @@
 
   <PropertyGroup>
     <PackageId>Rulealize.Plugin.Chance</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Reny</Authors>
     <Description>Resolving what nobody chose in Rulealize rule sets: chance.pick, a weighted draw the runtime enumerates.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
